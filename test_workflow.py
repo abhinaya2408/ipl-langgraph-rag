@@ -1,13 +1,21 @@
 from app.graph.builder import graph
 
-result = graph.invoke(
-    {
-        "user_query": "How many runs has Virat Kohli scored?"
-    }
-)
+queries = [
+    "Virat Kohli runs",
+    "Who has most wickets?",
+    "Tell me about Hyderabad pitch"
+]
 
-print("\nAnswer:\n")
+for query in queries:
 
-print(
-    result["final_answer"]
-)
+    print("\n" + "=" * 50)
+    print("Query:", query)
+
+    result = graph.invoke(
+        {
+            "user_query": query
+        }
+    )
+
+    print("\nAnswer:")
+    print(result["final_answer"])

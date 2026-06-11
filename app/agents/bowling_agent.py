@@ -1,0 +1,21 @@
+from app.retrieval.retriever import get_retriever
+
+retriever = get_retriever()
+
+
+def bowling_agent(state):
+
+    print("Bowling Agent Executed")
+
+    docs = retriever.invoke(
+        state["user_query"]
+    )
+
+    context = "\n\n".join(
+        doc.page_content
+        for doc in docs
+    )
+
+    return {
+        "context": context
+    }
