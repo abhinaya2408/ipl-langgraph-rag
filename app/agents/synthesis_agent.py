@@ -12,7 +12,7 @@ def synthesis_agent(state):
     prompt = f"""
 You are an IPL assistant.
 
-Answer only from the context.
+Answer only from the given context.
 
 Context:
 {context}

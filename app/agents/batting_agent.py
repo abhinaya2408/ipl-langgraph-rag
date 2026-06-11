@@ -17,5 +17,9 @@ def batting_agent(state):
     )
 
     return {
-        "context": context
+        "context": context,
+        "sources": [
+            doc.page_content[:500]
+            for doc in docs
+        ]
     }

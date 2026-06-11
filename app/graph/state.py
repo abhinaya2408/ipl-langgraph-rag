@@ -1,5 +1,4 @@
-from typing import TypedDict
-
+from typing import TypedDict, List
 
 class IPLState(TypedDict):
 
@@ -8,5 +7,7 @@ class IPLState(TypedDict):
     query_type: str
 
     context: str
+
+    sources: List[str]
 
     final_answer: str
