@@ -40,3 +40,5 @@ langsmith
 
 # Optional Utilities
 typing-extensions
+
+langchain-text-splitters
