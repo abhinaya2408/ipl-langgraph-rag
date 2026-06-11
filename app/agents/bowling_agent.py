@@ -1,7 +1,8 @@
-from app.retrieval.retriever import get_retriever
+from app.retrieval.specialized_retrievers import (
+    get_bowling_retriever
+)
 
-retriever = get_retriever()
-
+retriever = get_bowling_retriever()
 
 def bowling_agent(state):
 
