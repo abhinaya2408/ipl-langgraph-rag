@@ -1,0 +1,42 @@
+# Core LangChain
+langchain
+langchain-community
+langchain-core
+
+# LangGraph
+langgraph
+
+# Groq
+langchain-groq
+
+# Vector Database
+chromadb
+
+# Embeddings
+sentence-transformers
+
+# PDF Processing
+pypdf
+pymupdf
+
+# Environment Variables
+python-dotenv
+
+# UI
+streamlit
+
+# Token Counting
+tiktoken
+
+# Data Handling
+pandas
+numpy
+
+# Validation
+pydantic
+
+# Monitoring & Debugging
+langsmith
+
+# Optional Utilities
+typing-extensions
