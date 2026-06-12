@@ -65,7 +65,7 @@ def get_records_retriever():
 
     return vectorstore.as_retriever(
         search_kwargs={
-            "k": 3,
+            "k": 5,
             "filter": {
                 "category": "records"
             }

@@ -4,19 +4,22 @@ from app.retrieval.specialized_retrievers import (
     get_records_retriever
 )
 
+retriever = get_records_retriever()
+
 
 @tool
-def search_records(query: str):
-
+def search_records(query: str) -> str:
     """
-    Search IPL records.
+    Search IPL records and milestones from the dataset.
     """
-
-    retriever = get_records_retriever()
 
     docs = retriever.invoke(query)
 
-    return "\n\n".join(
+    docs = docs[:2]
+
+    context = "\n\n".join(
         doc.page_content
         for doc in docs
     )
+
+    return context

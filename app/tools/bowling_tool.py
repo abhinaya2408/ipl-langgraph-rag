@@ -4,19 +4,26 @@ from app.retrieval.specialized_retrievers import (
     get_bowling_retriever
 )
 
+retriever = get_bowling_retriever()
+
 
 @tool
-def search_bowling_stats(query: str):
-
+def search_bowling_stats(query: str) -> str:
     """
-    Search bowling statistics.
+    Search bowling statistics from the IPL dataset.
     """
-
-    retriever = get_bowling_retriever()
 
     docs = retriever.invoke(query)
 
-    return "\n\n".join(
+    context = "\n\n".join(
         doc.page_content
         for doc in docs
     )
+
+    return f"""
+You are given IPL bowling statistics.
+
+Use ONLY the information below.
+
+{context}
+"""

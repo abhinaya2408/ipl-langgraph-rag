@@ -4,19 +4,22 @@ from app.retrieval.specialized_retrievers import (
     get_batting_retriever
 )
 
+retriever = get_batting_retriever()
+
 
 @tool
-def search_batting_stats(query: str):
-
+def search_batting_stats(query: str) -> str:
     """
-    Search batting statistics.
+    Search batting statistics from the IPL dataset.
     """
-
-    retriever = get_batting_retriever()
 
     docs = retriever.invoke(query)
 
-    return "\n\n".join(
+    docs = docs[:2]
+
+    context = "\n\n".join(
         doc.page_content
         for doc in docs
     )
+
+    return context

@@ -1,8 +1,13 @@
 import streamlit as st
 import time
 
-from app.graph.builder import graph
+from app.react.graph import react_graph
 
+from langchain_core.messages import (
+    HumanMessage,
+    AIMessage,
+    ToolMessage
+)
 # ----------------------------------
 # Page Config
 # ----------------------------------
@@ -47,7 +52,10 @@ with st.sidebar:
     col1, col2 = st.columns(2)
 
     with col1:
-        st.metric("Agents", "4")
+        st.metric(
+            "Architecture",
+            "ReAct"
+        )
 
     with col2:
         st.metric("Tools", "4")
@@ -61,11 +69,11 @@ with st.sidebar:
 
     st.subheader("Features")
 
-    st.write("✅ Multi-Agent Routing")
-    st.write("✅ Metadata Retrieval")
+    st.write("✅ ReAct Agent")
     st.write("✅ Tool Calling")
-    st.write("✅ ChromaDB")
     st.write("✅ LangGraph")
+    st.write("✅ ChromaDB")
+    st.write("✅ Metadata Retrieval")
 
     st.markdown("---")
 
@@ -195,13 +203,19 @@ if prompt:
 
             start_time = time.time()
 
-            result = graph.invoke(
+            result = react_graph.invoke(
                 {
-                    "user_query": prompt
+                    "messages": [
+                        HumanMessage(
+                            content=prompt
+                        )
+                    ]
                 }
             )
 
-            answer = result["final_answer"]
+            messages = result["messages"]
+
+            answer = messages[-1].content
 
             end_time = time.time()
 
@@ -212,93 +226,91 @@ if prompt:
             )
 
             # ----------------------------------
-            # Workflow
+            # ReAct Workflow
             # ----------------------------------
-
-            query_type = result.get(
-                "query_type",
-                "unknown"
-            )
-
-            tool_used = result.get(
-                "tool_used",
-                "No Tool"
-            )
-            with st.expander(
-            "🔄 Agent Workflow"
-            ):
-
-                st.success(
-                    "✅ Router Agent"
-                )
-
-                st.markdown("⬇️")
-
-                st.info(
-                    f"🤖 {query_type.title()} Agent"
-                )
-
-                st.markdown("⬇️")
-
-                st.warning(
-                    f"🛠 Tool Used: {tool_used}"
-                )
-
-                st.markdown("⬇️")
-
-                st.success(
-                    "✅ Synthesis Agent"
-                )
-
-            # ----------------------------------
-# Tool Information
-# ----------------------------------
 
             with st.expander(
-                "🛠 Tool Information"
+                "🧠 ReAct Workflow",
+                expanded=False
             ):
 
-                st.write(
-                    f"Selected Tool: `{tool_used}`"
-                )
+                for msg in messages:
 
-            # ----------------------------------
-            # Sources
-            # ----------------------------------
+                    # --------------------------
+                    # User Message
+                    # --------------------------
 
-            sources = result.get(
-                "sources",
-                []
-            )
-
-            with st.expander(
-                "📚 Retrieved Sources"
-            ):
-
-                if not sources:
-
-                    st.info(
-                        "No source chunks available."
-                    )
-
-                else:
-
-                    for idx, source in enumerate(
-                        sources,
-                        start=1
+                    if isinstance(
+                        msg,
+                        HumanMessage
                     ):
 
-                        st.markdown(
-                            f"### Source {idx}"
+                        st.success(
+                            f"👤 User\n\n{msg.content}"
                         )
 
-                        st.write(source)
+                    # --------------------------
+                    # AI Message
+                    # --------------------------
 
-                        st.divider()
+                    elif isinstance(
+                        msg,
+                        AIMessage
+                    ):
 
-    st.session_state.messages.append(
-        {
-            "role": "assistant",
-            "content": answer
-        }
-    )
+                        # Tool Calls
+
+                        if msg.tool_calls:
+
+                            tool = msg.tool_calls[0]
+
+                            st.info(
+                                    f"""
+🛠 Tool Selected
+
+**Tool Name**
+`{tool['name']}`
+
+**Query**
+
+```text
+{tool['args'].get("query", "")}
+
+"""
+)
+
+                        # Final Answer
+
+                        elif msg.content:
+
+                            st.success(
+                                f"""
+🤖 Final Answer
+
+{msg.content}
+"""
+                            )
+
+                    # --------------------------
+                    # Tool Observation
+                    # --------------------------
+
+                    elif isinstance(
+                        msg,
+                        ToolMessage
+                    ):
+
+                        st.warning(
+                            "📄 Tool Observation"
+                        )
+
+                        preview = (
+                            msg.content[:300] + "..."
+                            if len(msg.content) > 300
+                            else msg.content
+                        )
+
+                        st.code(
+                            preview,
+                            language="text"
+                        )
