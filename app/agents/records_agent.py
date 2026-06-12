@@ -1,27 +1,18 @@
-from app.retrieval.specialized_retrievers import (
-    get_records_retriever
+from app.tools.records_tool import (
+    search_records
 )
-
-retriever = get_records_retriever()
 
 
 def records_agent(state):
 
-    print("Records Agent Executed")
-
-    docs = retriever.invoke(
-        state["user_query"]
-    )
-
-    context = "\n\n".join(
-        doc.page_content
-        for doc in docs
+    result = search_records.invoke(
+        {
+            "query": state["user_query"]
+        }
     )
 
     return {
-        "context": context,
-        "sources": [
-            doc.page_content[:500]
-            for doc in docs
-        ]
+    "context": result,
+    "sources": [result],
+    "tool_used": "search_records"
     }

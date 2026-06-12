@@ -50,7 +50,7 @@ with st.sidebar:
         st.metric("Agents", "4")
 
     with col2:
-        st.metric("Chunks", "40")
+        st.metric("Tools", "4")
 
     st.metric(
         "Model",
@@ -62,7 +62,8 @@ with st.sidebar:
     st.subheader("Features")
 
     st.write("✅ Multi-Agent Routing")
-    st.write("✅ RAG")
+    st.write("✅ Metadata Retrieval")
+    st.write("✅ Tool Calling")
     st.write("✅ ChromaDB")
     st.write("✅ LangGraph")
 
@@ -219,18 +220,46 @@ if prompt:
                 "unknown"
             )
 
+            tool_used = result.get(
+                "tool_used",
+                "No Tool"
+            )
             with st.expander(
-                "🔄 Agent Workflow"
+            "🔄 Agent Workflow"
             ):
 
-                st.code(
-                    f"""
-Router Agent
-      ↓
-{query_type.title()} Agent
-      ↓
-Synthesis Agent
-"""
+                st.success(
+                    "✅ Router Agent"
+                )
+
+                st.markdown("⬇️")
+
+                st.info(
+                    f"🤖 {query_type.title()} Agent"
+                )
+
+                st.markdown("⬇️")
+
+                st.warning(
+                    f"🛠 Tool Used: {tool_used}"
+                )
+
+                st.markdown("⬇️")
+
+                st.success(
+                    "✅ Synthesis Agent"
+                )
+
+            # ----------------------------------
+# Tool Information
+# ----------------------------------
+
+            with st.expander(
+                "🛠 Tool Information"
+            ):
+
+                st.write(
+                    f"Selected Tool: `{tool_used}`"
                 )
 
             # ----------------------------------

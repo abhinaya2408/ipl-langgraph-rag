@@ -1,26 +1,18 @@
-from app.retrieval.specialized_retrievers import (
-    get_bowling_retriever
+from app.tools.bowling_tool import (
+    search_bowling_stats
 )
 
-retriever = get_bowling_retriever()
 
 def bowling_agent(state):
 
-    print("Bowling Agent Executed")
-
-    docs = retriever.invoke(
-        state["user_query"]
-    )
-
-    context = "\n\n".join(
-        doc.page_content
-        for doc in docs
+    result = search_bowling_stats.invoke(
+        {
+            "query": state["user_query"]
+        }
     )
 
     return {
-        "context": context,
-        "sources": [
-            doc.page_content[:500]
-            for doc in docs
-        ]
-    }
+    "context": result,
+    "sources": [result],
+    "tool_used": "search_bowling_stats"
+}

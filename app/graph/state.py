@@ -1,6 +1,6 @@
-from typing import TypedDict, List
+from typing import TypedDict
 
-class IPLState(TypedDict):
+class IPLState(TypedDict, total=False):
 
     user_query: str
 
@@ -8,6 +8,6 @@ class IPLState(TypedDict):
 
     context: str
 
-    sources: List[str]
-
     final_answer: str
+
+    tool_used: str
