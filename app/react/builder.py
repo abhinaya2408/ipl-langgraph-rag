@@ -12,7 +12,6 @@ from langgraph.prebuilt import (
 from app.react.assistant import assistant
 from app.react.tools import TOOLS
 
-
 # ---------------------------------------
 # Build Graph
 # ---------------------------------------
@@ -43,7 +42,7 @@ builder.add_edge(
 )
 
 # ---------------------------------------
-# Assistant → Tool OR End
+# Assistant -> Tool OR End
 # ---------------------------------------
 
 builder.add_conditional_edges(
@@ -52,16 +51,10 @@ builder.add_conditional_edges(
 )
 
 # ---------------------------------------
-# Tool → Assistant
+# Tool -> Assistant
 # ---------------------------------------
 
 builder.add_edge(
     "tools",
     "assistant"
 )
-
-# ---------------------------------------
-# Compile Graph
-# ---------------------------------------
-
-graph = builder.compile()

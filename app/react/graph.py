@@ -1,3 +1,17 @@
-from app.react.builder import graph
+from langgraph.checkpoint.memory import MemorySaver
 
-react_graph = graph
+from app.react.builder import builder
+
+# ---------------------------------------
+# Memory Checkpointer
+# ---------------------------------------
+
+memory = MemorySaver()
+
+# ---------------------------------------
+# Compile Graph
+# ---------------------------------------
+
+react_graph = builder.compile(
+    checkpointer=memory
+)

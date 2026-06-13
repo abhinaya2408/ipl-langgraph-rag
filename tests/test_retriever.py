@@ -1,16 +1,13 @@
-from app.retrieval.retriever import get_retriever
+from app.retrieval.specialized_retrievers import get_batting_retriever
 
-retriever = get_retriever()
+retriever = get_batting_retriever()
 
-docs = retriever.invoke(
-    "Virat Kohli runs"
-)
+docs = retriever.invoke("Virat Kohli strike rate")
 
-print("\nRetrieved Documents:\n")
+print("=" * 50)
 
-for i, doc in enumerate(docs, start=1):
-
+for i, doc in enumerate(docs, 1):
     print(f"\nDocument {i}")
-    print("-" * 50)
-
+    print(doc.metadata)
     print(doc.page_content)
+    print("=" * 50)

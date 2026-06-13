@@ -25,6 +25,13 @@ st.set_page_config(
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+if "thread_id" not in st.session_state:
+    st.session_state.thread_id = "ipl_chat"
+
+# LangChain conversation history
+# if "chat_history" not in st.session_state:
+#     st.session_state.chat_history = []
+
 if "sample_prompt" not in st.session_state:
     st.session_state.sample_prompt = None
 
@@ -80,6 +87,11 @@ with st.sidebar:
     if st.button("🗑️ Clear Chat"):
 
         st.session_state.messages = []
+        # st.session_state.chat_history = []
+
+        st.session_state.thread_id = str(time.time())
+
+
 
         st.rerun()
 
@@ -203,6 +215,16 @@ if prompt:
 
             start_time = time.time()
 
+
+            # # Add current user message to conversation history
+            # st.session_state.chat_history.append(
+            #     HumanMessage(
+            #         content=prompt
+            #     )
+            # )
+
+            # Invoke ReAct graph with full conversation history
+
             result = react_graph.invoke(
                 {
                     "messages": [
@@ -210,6 +232,11 @@ if prompt:
                             content=prompt
                         )
                     ]
+                },
+                config={
+                    "configurable": {
+                        "thread_id": st.session_state.thread_id
+                    }
                 }
             )
 
@@ -314,3 +341,13 @@ if prompt:
                             preview,
                             language="text"
                         )
+# ----------------------------------
+# Save assistant response
+# ----------------------------------
+
+    st.session_state.messages.append(
+        {
+            "role": "assistant",
+            "content": answer
+        }
+    )
